@@ -31,14 +31,15 @@ public class PillBox {
   DataSource ds = DataSource.connect("http://rxnav.nlm.nih.gov/REST/brands?").set("ingredientids", id);
   ds.load();
   ds.printUsageString();
+  
   //puts all the brand names into an array.
   drugs = ds.fetchStringArray("brandGroup/conceptProperties/name");
   
   System.out.println(drugs.length);
   
+  //Prints out all drug brands with ingredient included. Does not work -- only pulls the first thing.
   for(int i = 0; i<drugs.length; i++){
    System.out.println(drugs[i]);
-   System.out.print(i);
   }
   
   
