@@ -9,7 +9,7 @@ public class Park{
   }
   
   //method to convert latitude and longitude
-  void convertLatLon(){
+  void convertLanLon(){
            // USGS uses standard parallels at 45.5 ̊N and 29.5 ̊N
            // with a central meridian value of 96 ̊W.
            // Latitude value is phi, longitude is lambda.
