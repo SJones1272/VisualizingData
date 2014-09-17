@@ -6,7 +6,7 @@ public class BestBuyProductFinder {
  public static void main(String[] args){
   //apikey = 9mm3ncj8r2a3cjq826m8rkac
   //api documentation at https://developer.bestbuy.com/documentation#responseFormat-response-format
-   
+  //http://api.remix.bestbuy.com/v1/products(search=samsung)?show=name,salePrice&apiKey=9mm3ncj8r2a3cjq826m8rkac&pageSize=100
   //Not the most accurate search...Kind of interesting though. 
    
   String product;
