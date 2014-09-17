@@ -1,4 +1,7 @@
 import java.awt.BorderLayout;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -56,6 +59,7 @@ public class DataFileChooser extends JPanel implements ActionListener {
    File file = fc.getSelectedFile();
    //displays path of file chosen
    System.out.println("Path: " + file.getAbsolutePath() + "\n");
+   copy2Clip(file.getAbsolutePath());
   }
   else{
    System.out.println("Operation cancelled. \n");
@@ -71,5 +75,12 @@ public class DataFileChooser extends JPanel implements ActionListener {
   frame.pack();
   frame.setVisible(true);
  }
-  
+ 
+ //copies a given string to the system clipboard. 
+ private static void copy2Clip(String x){
+  StringSelection sSelect = new StringSelection(x);
+  Clipboard clip = Toolkit.getDefaultToolkit().getSystemClipboard();
+  clip.setContents(sSelect, null);
+ }
+ 
 }
