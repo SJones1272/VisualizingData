@@ -9,17 +9,17 @@ import java.util.List;
 import java.util.Scanner;
 
  /*
-  * ==TASKS==
+  * Tasks
   * Add a key x
   * Remove a key
-  * get a key 
+  * get a key x
   * list all keys
   */
 
 public class ApiKeyManager {
 
 
- //various variables
+ //Array of all ApiKeys
  static String temp;
  static String[] parts;
  static List<ApiKey> keys = new ArrayList<ApiKey>();
@@ -29,9 +29,10 @@ public class ApiKeyManager {
  public static void main(String[] args) throws IOException{
   readfile();
   addKey(new ApiKey("test", "test", "test"));
+  System.out.println(getKey("Ebay"));
  }
  
- //read in all keys and store them in a list
+ //read in all keys and store in an array
  public static void readfile() throws FileNotFoundException{
   Scanner scan = new Scanner(new FileReader("keys.txt"));
   while(scan.hasNextLine()){
@@ -44,7 +45,6 @@ public class ApiKeyManager {
   scan.close();
  }
  
- //adds a given key to the file
  public static void addKey(ApiKey key) throws IOException{
   FileOutputStream fos = new FileOutputStream("keys.txt");
   BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
@@ -56,6 +56,16 @@ public class ApiKeyManager {
   bw.write(key.name + "," + key.method + "," + key.key);
   bw.close();
   
+ }
+ 
+ public static String getKey(String name){
+  String temp = "";
+  for(int i = 0; i<keys.size(); i++){
+   if(keys.get(i).name.equalsIgnoreCase(name)){
+    temp= keys.get(i).key;
+   }
+  }
+  return temp;
  }
  
 }
