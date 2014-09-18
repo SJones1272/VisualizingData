@@ -13,7 +13,7 @@ import java.util.Scanner;
   * Add a key x
   * Remove a key
   * get a key x
-  * list all keys
+  * list all keys x
   */
 
 public class ApiKeyManager {
@@ -40,11 +40,11 @@ public class ApiKeyManager {
    parts = temp.split(",");
    keys.add(new ApiKey(parts[0], parts[1], parts[2]));
    i++;
-   System.out.println(temp);
   }
   scan.close();
  }
  
+ //adds a given key to the currently stored
  public static void addKey(ApiKey key) throws IOException{
   FileOutputStream fos = new FileOutputStream("keys.txt");
   BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
@@ -58,6 +58,7 @@ public class ApiKeyManager {
   
  }
  
+ //gets a key given its name
  public static String getKey(String name){
   String temp = "";
   for(int i = 0; i<keys.size(); i++){
@@ -66,6 +67,14 @@ public class ApiKeyManager {
    }
   }
   return temp;
+ }
+ 
+ //list all the keys currently stored
+ public static void listKeys(){
+  for(int i = 0; i<keys.size(); i++){
+   Atemp = keys.get(i);
+   System.out.println(Atemp.name + "," + Atemp.method + "," + Atemp.key);
+  }
  }
  
 }
