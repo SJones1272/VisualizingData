@@ -11,7 +11,7 @@ import java.util.Scanner;
  /*
   * Tasks
   * Add a key x
-  * Remove a key
+  * Remove a key x
   * get a key x
   * list all keys x
   */
@@ -28,8 +28,9 @@ public class ApiKeyManager {
  
  public static void main(String[] args) throws IOException{
   readfile();
-  addKey(new ApiKey("test", "test", "test"));
+  //addKey(new ApiKey("test3", "test", "test"));
   System.out.println(getKey("Ebay"));
+  //removeKey("test3");
  }
  
  //read in all keys and store in an array
@@ -44,8 +45,8 @@ public class ApiKeyManager {
   scan.close();
  }
  
- //adds a given key to the currently stored
- public static void addKey(ApiKey key) throws IOException{
+ //writes to the file keys.txt
+ private static void writefile() throws IOException{
   FileOutputStream fos = new FileOutputStream("keys.txt");
   BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
   for(int i = 0; i<keys.size(); i++){
@@ -53,9 +54,13 @@ public class ApiKeyManager {
    bw.write(Atemp.name + "," + Atemp.method + "," + Atemp.key);
    bw.newLine();
   }
-  bw.write(key.name + "," + key.method + "," + key.key);
   bw.close();
-  
+ }
+ 
+ //adds a given key to the currently stored
+ public static void addKey(ApiKey key) throws IOException{
+  keys.add(key);
+  writefile();
  }
  
  //gets a key given its name
@@ -74,6 +79,18 @@ public class ApiKeyManager {
   for(int i = 0; i<keys.size(); i++){
    Atemp = keys.get(i);
    System.out.println(Atemp.name + "," + Atemp.method + "," + Atemp.key);
+  }
+ }
+ 
+ //removes a given key
+ public static void removeKey(String name) throws IOException{
+  for(int i = 0; i<keys.size(); i++){
+   Atemp = keys.get(i);
+   if(Atemp.name.equalsIgnoreCase(name)){
+    keys.remove(i);
+    writefile();
+    break;
+   }
   }
  }
  
