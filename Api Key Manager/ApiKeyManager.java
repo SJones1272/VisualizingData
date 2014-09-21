@@ -19,22 +19,20 @@ import java.util.Scanner;
 public class ApiKeyManager {
 
 
- //Array of all ApiKeys
- static String temp;
- static String[] parts;
- static List<ApiKey> keys = new ArrayList<ApiKey>();
- static int i = 0;
- static ApiKey Atemp;
+ //List of all ApiKeys
+  String temp;
+  String[] parts;
+  List<ApiKey> keys = new ArrayList<ApiKey>();
+  int i = 0;
+  ApiKey Atemp;
  
- public static void main(String[] args) throws IOException{
+ //automatically reads in the file when new key manager is created.
+ ApiKeyManager() throws FileNotFoundException{
   readfile();
-  //addKey(new ApiKey("test3", "test", "test"));
-  System.out.println(getKey("Ebay"));
-  //removeKey("test3");
  }
  
  //read in all keys and store in an array
- public static void readfile() throws FileNotFoundException{
+ public void readfile() throws FileNotFoundException{
   Scanner scan = new Scanner(new FileReader("keys.txt"));
   while(scan.hasNextLine()){
    temp = scan.nextLine();
@@ -46,7 +44,7 @@ public class ApiKeyManager {
  }
  
  //writes to the file keys.txt
- private static void writefile() throws IOException{
+ private void writefile() throws IOException{
   FileOutputStream fos = new FileOutputStream("keys.txt");
   BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
   for(int i = 0; i<keys.size(); i++){
@@ -58,13 +56,13 @@ public class ApiKeyManager {
  }
  
  //adds a given key to the currently stored
- public static void addKey(ApiKey key) throws IOException{
+ public void addKey(ApiKey key) throws IOException{
   keys.add(key);
   writefile();
  }
  
  //gets a key given its name
- public static String getKey(String name){
+ public String getKey(String name){
   String temp = "";
   for(int i = 0; i<keys.size(); i++){
    if(keys.get(i).name.equalsIgnoreCase(name)){
@@ -75,15 +73,17 @@ public class ApiKeyManager {
  }
  
  //list all the keys currently stored
- public static void listKeys(){
+ public ApiKey[] listKeys(){
+  ApiKey[] s = new ApiKey[keys.size()];
   for(int i = 0; i<keys.size(); i++){
    Atemp = keys.get(i);
-   System.out.println(Atemp.name + "," + Atemp.method + "," + Atemp.key);
+   s[i] = Atemp;
   }
+  return s;
  }
  
  //removes a given key
- public static void removeKey(String name) throws IOException{
+ public void removeKey(String name) throws IOException{
   for(int i = 0; i<keys.size(); i++){
    Atemp = keys.get(i);
    if(Atemp.name.equalsIgnoreCase(name)){
