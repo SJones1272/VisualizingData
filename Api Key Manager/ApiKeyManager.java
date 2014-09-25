@@ -1,97 +1,97 @@
-import java.io.BufferedWriter;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
+import java.util.prefs.BackingStoreException;
+import java.util.prefs.Preferences;
 
- /*
-  * Tasks
-  * Add a key x
-  * Remove a key x
-  * get a key x
-  * list all keys x
-  */
 
 public class ApiKeyManager {
-
-
- //List of all ApiKeys
-  String temp;
-  String[] parts;
-  List<ApiKey> keys = new ArrayList<ApiKey>();
-  int i = 0;
-  ApiKey Atemp;
  
- //automatically reads in the file when new key manager is created.
- ApiKeyManager() throws FileNotFoundException{
-  readfile();
+  /*
+   * Tasks
+   * Add a key x
+   * Remove a key x
+   * get a key x
+   * list all keys x
+   */
+ 
+ Preferences root;
+ List<ApiKey> keys = new ArrayList<ApiKey>();
+ ApiKey tempA;
+ 
+ 
+ public ApiKeyManager() throws BackingStoreException{
+  //when called it makes a new node ApiKeys in the user node.
+  Preferences.userRoot().node("ApiKeys"); 
+  readFile();
  }
  
- //read in all keys and store in an array
- public void readfile() throws FileNotFoundException{
-  Scanner scan = new Scanner(new FileReader("keys.txt"));
-  while(scan.hasNextLine()){
-   temp = scan.nextLine();
-   parts = temp.split(",");
-   keys.add(new ApiKey(parts[0], parts[1], parts[2]));
-   i++;
+ public static void main(String[] args) throws BackingStoreException{
+  ApiKeyManager apiM = new ApiKeyManager();
+  System.out.println(apiM.listKeys());
+ }
+ 
+ //reads the preferences file and stores everything in the keys array. 
+ public void readFile() throws BackingStoreException{
+  keys.removeAll(keys);
+  root = Preferences.userRoot().node("ApiKey");
+  String[] temp = root.childrenNames();
+  System.out.println(temp.length);
+  if(temp.length != 0){
+   for(int i = 0; i<temp.length; i++){
+    System.out.println(temp[i]);
+    root = Preferences.userRoot().node("ApiKey/"+temp[i]);
+    System.out.println(root.absolutePath());
+    String s = root.get("name", "!NAME");
+    String a = root.get("method", "!METHOD");
+    String y = root.get("key", "!KEY");
+    keys.add(new ApiKey(s, a, y));
+    }
   }
-  scan.close();
  }
  
- //writes to the file keys.txt
- private void writefile() throws IOException{
-  FileOutputStream fos = new FileOutputStream("keys.txt");
-  BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
+ //adds a given key to a node
+ public void addKey(ApiKey key){
+  String s = key.name;
+  String a = key.method;
+  String y = key.key;
+  
+  //directs us to the given node, if its not there it is created for us.
+  root = Preferences.userRoot().node("ApiKey/"+s);
+  root.put("name", s);
+  root.put("method", a);
+  root.put("key", y);
+ }
+ 
+ //gets a key and all of its values given its name.
+ public String getKey(String name) throws Exception{
+  //Determines if the node exists
+  if(root.nodeExists("/ApiKey/"+name)){
+   root = Preferences.userRoot().node("ApiKey/"+name);
+   String s = root.get("name", "!NAME");
+   String a = root.get("method", "!METHOD");
+   String y = root.get("key", "!KEY");
+   return "Name: " + s + "\nMethod: " + a + "\nKey: " + y;
+  }
+  else{
+   throw new Exception("The " + name + " node was not found.");
+  }
+ }
+ 
+ //returns all the keys in a string. 
+ public String listKeys(){
+  String r = "";
   for(int i = 0; i<keys.size(); i++){
-   Atemp = keys.get(i);
-   bw.write(Atemp.name + "," + Atemp.method + "," + Atemp.key);
-   bw.newLine();
+   String s = keys.get(i).name;
+   String a = keys.get(i).method;
+   String y = keys.get(i).key;
+   r = r + s + " " + a + " " + y +"\n";
   }
-  bw.close();
+  return r;
  }
  
- //adds a given key to the currently stored
- public void addKey(ApiKey key) throws IOException{
-  keys.add(key);
-  writefile();
+ //removes the key and all of its information.
+ public void removeKey(String name) throws BackingStoreException{
+  root = Preferences.userRoot().node("ApiKey/"+name);
+  root.removeNode();
  }
- 
- //gets a key given its name
- public String getKey(String name){
-  String temp = "";
-  for(int i = 0; i<keys.size(); i++){
-   if(keys.get(i).name.equalsIgnoreCase(name)){
-    temp= keys.get(i).key;
-   }
-  }
-  return temp;
- }
- 
- //list all the keys currently stored
- public ApiKey[] listKeys(){
-  ApiKey[] s = new ApiKey[keys.size()];
-  for(int i = 0; i<keys.size(); i++){
-   Atemp = keys.get(i);
-   s[i] = Atemp;
-  }
-  return s;
- }
- 
- //removes a given key
- public void removeKey(String name) throws IOException{
-  for(int i = 0; i<keys.size(); i++){
-   Atemp = keys.get(i);
-   if(Atemp.name.equalsIgnoreCase(name)){
-    keys.remove(i);
-    writefile();
-    break;
-   }
-  }
- }
- 
 }
